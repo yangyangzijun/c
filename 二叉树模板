@@ -1,1 +1,78 @@
+#include <iostream>
+using namespace std;
+class tree;
+class TreeNode
+{
 
+    friend  class  tree;
+public:
+    int  data;
+    TreeNode *lchild, *rchild;
+};
+class tree{
+public:
+    TreeNode *root;
+    void CreateBiTree(TreeNode* &T);
+    void PreOrderTraverse(TreeNode *T);
+    void InOrderTraverse(TreeNode *T);
+    void PostOrderTraverse(TreeNode *T);
+};
+void tree::CreateBiTree(TreeNode* &T)	//注意：&的意思是传进来节点指针的引用，目的是让传递进来的指针发生改变
+{
+    int c;
+    cin >> c;
+    if (0 == c)             //当遇到#时，令树的根节点为NULL，从而结束该分支的递归
+        T = NULL;
+    else
+    {
+        T = new TreeNode;
+        T->data = c;
+        CreateBiTree(T->lchild);
+        CreateBiTree(T->rchild);
+    }
+}
+
+void tree::PreOrderTraverse(TreeNode *T)		//参数为BiNode * &T也可以
+{
+    if (T)
+    {
+        cout << T->data << " ";
+        PreOrderTraverse(T->lchild);
+        PreOrderTraverse(T->rchild);
+    }
+}
+
+void tree::InOrderTraverse(TreeNode *T)
+{
+    if (T)
+    {
+        InOrderTraverse(T->lchild);
+        cout << T->data << " ";
+        InOrderTraverse(T->rchild);
+    }
+}
+
+void tree::PostOrderTraverse(TreeNode *T)
+{
+    if (T)
+    {
+        PostOrderTraverse(T->lchild);
+        PostOrderTraverse(T->rchild);
+        cout << T->data << " ";
+    }
+}
+
+int main()
+{
+    tree t1;
+
+
+
+    cout << "创建二叉树,其中A~Z字符代表数据,用'#'表示空树：" << endl;
+    t1.CreateBiTree(t1.root);
+    cout << "创建二叉树成功……" << endl;
+    cout << "先序遍历:" << endl;
+   t1. PreOrderTraverse(t1.root);
+
+    return 0;
+}
