@@ -1,9 +1,12 @@
 #include <iostream>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <algorithm>
 using namespace std;
 class tree;
 class TreeNode
 {
-
     friend  class  tree;
 public:
     int  data;
@@ -12,11 +15,109 @@ public:
 class tree{
 public:
     TreeNode *root;
-    void CreateBiTree(TreeNode* &T);
-    void PreOrderTraverse(TreeNode *T);
-    void InOrderTraverse(TreeNode *T);
-    void PostOrderTraverse(TreeNode *T);
+    int Treedepth(TreeNode *pRoot);//树的深度
+    void Mirror(TreeNode *pRoot);//二叉树镜像反转
+    void CreateBiTree(TreeNode* &T);//树的创建
+    void PreOrderTraverse(TreeNode *T);//前序遍历
+    void PreOrder_stack1(TreeNode *T);//利用栈的前序遍历1
+    void PreOrder_stack2(TreeNode *T);//利用栈的前序遍历2
+    void InOrderTraverse(TreeNode *T);//中序遍历
+    void PostOrderTraverse(TreeNode *T);//后续遍历
+    void LevelOrder(TreeNode *p);      //层次遍历
+    void ReverLenelOrder(TreeNode *p); //之子遍历
 };
+void tree ::ReverLenelOrder(TreeNode *p) {
+    if (p== nullptr) return;
+    queue<TreeNode *> list;
+    list.push(p);
+    int flag=0;
+    while (!list.empty())
+    { vector<int> result;
+      int length=list.size();
+
+      while (length>0)
+      {
+          p=list.front();
+          result.push_back(p->data);
+          list.pop();
+          if(p->lchild) list.push(p->lchild);
+          if(p->rchild) list.push(p->rchild);
+          length--;
+      }
+     if(flag%2==0)
+      {
+          reverse(result.begin(),result.end());
+      }
+      for(int i=0;i<result.size();i++)
+      {
+          cout<<result[i];
+      }
+      flag++;
+
+    }
+}
+void tree::LevelOrder(TreeNode *p) {
+    if (p== nullptr) return;
+    queue<TreeNode *> list;
+    list.push(p);
+    while (!list.empty())
+    {
+        p=list.front();
+        list.pop();
+        cout<<p->data;
+        if(p->lchild!= nullptr) list.push(p->lchild);
+        if(p->rchild!= nullptr) list.push(p->rchild);
+
+    }
+}
+void tree::PreOrder_stack2(TreeNode *T) {
+    if (T== nullptr)
+        return;
+    stack<TreeNode *> stack_1;
+    stack_1.push(T);
+    while (!stack_1.empty())
+    {  T=stack_1.top();
+        cout<<T->data;
+        stack_1.pop();
+
+        if(T->rchild!= nullptr) stack_1.push(T->rchild);
+        if (T->lchild!= nullptr) stack_1.push(T->lchild);
+
+    }
+
+}
+void tree::PreOrder_stack1(TreeNode *T) {
+    if (T== nullptr)
+        return;
+    stack<TreeNode *> stack_1;
+    stack_1.push(NULL);//设置退出标志
+    while (T!=NULL)
+    {
+        cout<<T->data;
+        if(T->rchild!= nullptr) stack_1.push(T->rchild);
+        if (T->lchild!= nullptr) T=T->lchild;
+        else
+        {
+            T=stack_1.top();
+            stack_1.pop();
+        }
+    }
+
+}
+int tree::Treedepth(TreeNode *pRoot) {
+    if(pRoot== nullptr) return 0;
+    return max(1+Treedepth(pRoot->rchild),1+Treedepth(pRoot->lchild));
+}
+void tree::Mirror(TreeNode *pRoot) {
+    if(pRoot== nullptr) return;
+    TreeNode *left,*right;
+    left=pRoot->lchild;
+    right=pRoot->rchild;
+    pRoot->lchild=right;
+    pRoot->rchild=left;
+    Mirror(pRoot->lchild);
+    Mirror(pRoot->rchild);
+}
 void tree::CreateBiTree(TreeNode* &T)	//注意：&的意思是传进来节点指针的引用，目的是让传递进来的指针发生改变
 {
     int c;
@@ -41,7 +142,6 @@ void tree::PreOrderTraverse(TreeNode *T)		//参数为BiNode * &T也可以
         PreOrderTraverse(T->rchild);
     }
 }
-
 void tree::InOrderTraverse(TreeNode *T)
 {
     if (T)
@@ -65,14 +165,12 @@ void tree::PostOrderTraverse(TreeNode *T)
 int main()
 {
     tree t1;
-
-
-
-    cout << "创建二叉树,其中A~Z字符代表数据,用'#'表示空树：" << endl;
     t1.CreateBiTree(t1.root);
     cout << "创建二叉树成功……" << endl;
-    cout << "先序遍历:" << endl;
-   t1. PreOrderTraverse(t1.root);
-
+    //cout << "先序遍历:" << endl;
+    //t1.Mirror(t1.root);
+    // cout<<"树的深度"<<t1.Treedepth(t1.root);
+    t1.ReverLenelOrder(t1.root);
     return 0;
 }
+//1 2 3 0 0 4 0 0 5 6 0 0 7 0 0
