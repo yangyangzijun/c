@@ -1,0 +1,48 @@
+#include <iostream>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+int search(string string1,string string2)
+{
+    int length_s1=string1.size(),length_s2=string2.size();
+    int **a = new int*[length_s1+1]; //第一维，
+    for( int i=0; i<=length_s1+1; i++)
+    {
+        a[i] = new int[length_s2+1]; //分配第二维，每一行的空间。
+    }
+    for(int i=0;i<length_s1+1;++i)
+    {
+        for(int j=0;j<length_s2+1;++j)
+        {
+            a[i][j]=0;
+        }
+    }
+    for(int i=1;i<length_s1+1;++i)
+    {
+        for(int j=1;j<length_s2+1;++j)
+        {
+            if (string1[i-1]==string2[j-1])
+            {
+                a[i][j]=1+a[i-1][j-1];
+            } else
+            {
+                a[i][j]=max(a[i-1][j],a[i][j-1]);
+            }
+            cout<<a[i][j] <<" ";}
+            cout<<endl;
+
+    }
+    return a[length_s1][length_s2];
+}
+
+
+
+
+int main()
+{
+   int n=search("abcda","adcba");
+   cout<<n;
+}
