@@ -1,0 +1,90 @@
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct TreeNode
+{
+    int val;
+   TreeNode *left,*right;
+   TreeNode(){
+       val=0;
+       left=right= nullptr;
+   };
+
+};
+void sort_vector(vector<TreeNode *> &array)
+{
+    for(int i=0;i<array.size();i++)
+    {
+        for(int j=i+1;j<array.size();j++)
+        {
+            if(array[i]->val>array[j]->val)
+            {
+                swap(array[i],array[j]);
+            }
+        }
+    }
+}
+class solution{
+public:
+    TreeNode * creat_tree(vector<int> &list)
+    {
+        vector<TreeNode*> Tree_list;
+
+
+        for(int i=0;i<list.size();i++)
+        {
+            TreeNode *p=new TreeNode();
+            p->val=list[i];
+
+            Tree_list.push_back(p);
+        }
+
+        int start=0,end=Tree_list.size()-1;
+        while (end-start>=1)
+        {
+            sort_vector(Tree_list);
+
+            TreeNode *temp=new TreeNode();
+            temp->val=Tree_list[start]->val+Tree_list[start+1]->val;
+            temp->left=Tree_list[start];
+
+            temp->right=Tree_list[start+1];
+            cout<<temp->val<<temp->left->val<<temp->right->val<<endl;
+
+            if(temp->left->left) temp->left->left->val;;
+
+            Tree_list.push_back(temp);
+            start+=2;
+            end=end+1;
+
+
+            cout<<endl;
+
+        }
+        return Tree_list[Tree_list.size()-1];
+    }
+    void Pre(TreeNode * root)
+    {
+        if(root== nullptr) return;;
+        cout<<root->val<<" ";
+        Pre(root->left);
+        Pre(root->right);
+    }
+};
+
+
+
+int main()
+{
+
+
+    vector<int> array={1,3,5,6};
+
+    solution s1;
+    s1.Pre(s1.creat_tree(array));
+
+}
